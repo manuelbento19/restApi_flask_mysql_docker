@@ -1,0 +1,29 @@
+version: '3'
+services:
+  database:
+    image: mysql:5.7
+    container_name: mysql_flask
+    ports:
+      - '3306:3306'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rest_api_flask  
+      MYSQL_PASSWORD: root
+    volumes:
+      - dbdata:/var/lib/mysql
+    
+  backend_flask:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    ports:
+      - '5000:5000'
+    volumes:
+      - .:/backend
+    env_file:
+      - .env
+volumes:
+  dbdata:
